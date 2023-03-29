@@ -1,20 +1,31 @@
-import logo from './logo.svg';
 import './App.css';
+import FlashcardBuilder from './FlashcardBuilder';
+import FlashcardList from './FlashcardList';
+import { useState } from "react";
 
 function App() {
-  const QUESTIONS = [{front: "question1", back:"answer1"},
-                    {front: "question2", back:"answer2"},
-                    {front: "question3", back:"answer3"},]
+  const [questions, setQuestions] = 
+    useState([{front: "Capital of Bulgaria", back:"Sofia"},
+              {front: "Official language of Nigeria", back:"English"},
+              {front: "Most populous city in Brazil", back:"São Paulo"},]);
+  
+  function onAdd(e) {
+    e.preventDefault();
+    const form = e.target;
+    const formData = new FormData(form);
+    const formJson = Object.fromEntries(formData.entries());
+
+    setQuestions(questions.concat({
+      front: formJson.front,
+      back: formJson.back
+    }));
+  }
 
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-      </header>
-
-      YOUR CODE WILL GO HERE!
-
-
+      <h1> Geography Flashcards Builder </h1>
+      <FlashcardList questions={questions}></FlashcardList>
+      <FlashcardBuilder onAdd={onAdd}></FlashcardBuilder>
     </div>
   );
 }
